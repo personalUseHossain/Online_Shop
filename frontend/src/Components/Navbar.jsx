@@ -1,5 +1,8 @@
 import React, { useRef, useState } from "react";
 
+//react router dom
+import { Link } from "react-router-dom";
+
 // fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,6 +13,11 @@ import {
   faCartShopping,
   faHeart,
   faArrowLeft,
+  faHouse,
+  faCouch,
+  faBlog,
+  faAddressBook,
+  faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
 
 // importing css
@@ -18,6 +26,7 @@ import "../CSS/Navbar.css";
 export default function Navbar() {
   // useState hooks
   const [toggleIcon, setToggleIcon] = useState(faBarsStaggered); //toggle menu icon
+  const [showUser, setShowUser] = useState(false);
 
   // useRef hooks
   const menu = useRef(null); //sidebar section
@@ -28,10 +37,10 @@ export default function Navbar() {
   function handleMenuToggle() {
     if (toggleIcon === faBarsStaggered) {
       setToggleIcon(faXmark); //changing toggle icon to xmark
-      menu.current.style.left = "0";
+      menu.current.style.width = "13rem";
     } else {
       setToggleIcon(faBarsStaggered); //changing toggle icon to bars
-      menu.current.style.left = "-10rem";
+      menu.current.style.width = "5rem";
     }
   }
 
@@ -40,7 +49,7 @@ export default function Navbar() {
     document.querySelector(".navbar").style.display = "none";
     document.querySelector(".small_input").style.display = "flex";
   }
-
+  //close search menu when click to back button
   function closeSearch() {
     document.querySelector(".navbar").style.display = "grid";
     document.querySelector(".small_input").style.display = "none";
@@ -65,19 +74,34 @@ export default function Navbar() {
         <div className="menu" ref={menu}>
           <ul>
             <li>
-              <a href="#">Home</a>
+              <Link to="/">
+                <FontAwesomeIcon className="menu-icon" icon={faHouse} />
+                Home
+              </Link>
             </li>
             <li>
-              <a href="#">Products</a>
+              <Link to="/">
+                <FontAwesomeIcon className="menu-icon" icon={faCouch} />
+                Products
+              </Link>
             </li>
             <li>
-              <a href="#">Blogs</a>
+              <Link to="/">
+                <FontAwesomeIcon className="menu-icon" icon={faBlog} />
+                Blogs
+              </Link>
             </li>
             <li>
-              <a href="#">About</a>
+              <Link to="/">
+                <FontAwesomeIcon className="menu-icon" icon={faAddressCard} />
+                About
+              </Link>
             </li>
             <li>
-              <a href="#">Contact</a>
+              <Link to="/">
+                <FontAwesomeIcon className="menu-icon" icon={faAddressBook} />
+                Contact
+              </Link>
             </li>
           </ul>
         </div>
@@ -87,7 +111,9 @@ export default function Navbar() {
             onClick={handleMenuToggle}
             icon={toggleIcon}
           />
-          <img src="../public/Img/Logo.png" alt="Logo" />
+          <Link to={"/"}>
+            <img src="../public/Img/Logo.png" alt="Logo" />
+          </Link>
         </div>
         <div className="nav-search">
           <input type="text" placeholder="Search for products..." />
@@ -98,25 +124,43 @@ export default function Navbar() {
           />
         </div>
         <div className="user">
-          <div className="account">
+          <div className="account" onClick={() => setShowUser(!showUser)}>
             <FontAwesomeIcon className="user-icon account" icon={faUser} />
-            <div>
+            <div className="account-txt">
               <small>Sign In</small>
               <h5>Account</h5>
             </div>
+            {showUser && (
+              <>
+                <div className="user-info">
+                  <FontAwesomeIcon icon={faXmark} />
+                  <Link to={"/login"}>
+                    <button>Login</button>
+                  </Link>
+                  <Link to={"/signup"}>
+                    <button>Sing up</button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
-          <FontAwesomeIcon className="user-icon account small" icon={faUser} />
-          <FontAwesomeIcon
-            className="user-icon cart small"
-            icon={faCartShopping}
-          />
-          <div className="cart">
-            <FontAwesomeIcon className="user-icon cart" icon={faCartShopping} />
-            <div>
-              <small>Total</small>
-              <h5>$0.00</h5>
+
+          <Link to={"/cart"}>
+            <FontAwesomeIcon
+              className="user-icon cart small"
+              icon={faCartShopping}
+            />
+            <div className="cart">
+              <FontAwesomeIcon
+                className="user-icon cart"
+                icon={faCartShopping}
+              />
+              <div>
+                <small>Total</small>
+                <h5>$0.00</h5>
+              </div>
             </div>
-          </div>
+          </Link>
           <div className="love">
             <FontAwesomeIcon className="user-icon" icon={faHeart} />
             <small className="love-counter">0</small>
