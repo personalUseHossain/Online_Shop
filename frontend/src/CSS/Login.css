@@ -1,0 +1,29 @@
+.login{
+    height: 80vh;
+    width: 100vw;
+    display: grid;
+    place-items: center;
+}
+.login form{
+    display: grid;
+    place-items: center;
+    align-self: end;
+    gap: 10px;
+}
+.login form label{
+    display: flex;
+}
+.login form label .login-icon{
+    padding: 15px;
+    background: whitesmoke;
+    border: 1px solid black;
+}
+.login form input{
+    padding: 10px;
+    min-width: 20rem;
+}
+.login form button{
+    padding: 10px;
+    width: 25rem;
+    background: orange;
+}
