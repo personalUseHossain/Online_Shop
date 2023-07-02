@@ -1,0 +1,70 @@
+.hero-section{
+    padding: 30px 0 50px 0;
+    display: grid;
+    gap: 3rem;
+    margin: 0 5rem;
+}
+.hero-section .sales .product-container,
+.hero-section .recent .product-container,
+.hero-section .foryou .product-container{
+    display: flex;
+    overflow-x: auto;
+    padding: 0 30px;
+    gap: 2rem;
+}
+.hero-section .foryou .product-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    grid-auto-flow: row;
+    padding: 0 30px;
+    gap: 2rem;
+}
+.hero-section .sales h2,
+.recent h2,
+.foryou h2{
+    margin: .5rem 2rem;
+}
+.hero-section .sales .product-container::-webkit-scrollbar{
+    display: none;
+}
+.product-container .product{
+    cursor: pointer;
+}
+.product .title{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+}
+.product .title h4{
+    margin-right: 0.8rem;
+}
+.product-container .product img{
+    width: 20rem;
+    border-radius: 20px;
+}
+
+
+
+.category{
+    display: flex;
+    align-items: center;
+    gap: 4.5rem;
+    height: 6rem;
+    padding: 0 50px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+.category::-webkit-scrollbar{
+    display: none;
+}
+.category .item{
+    display: grid;
+    place-items: center;
+    transition: .3s;
+}
+.category .item:hover{
+    transform: scale(1.1);
+}
+.category .item img{
+    width: 3rem;
+}
