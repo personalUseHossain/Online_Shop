@@ -1,19 +1,20 @@
 /* Navbar styling */
 .navbar{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    padding: 0 20px;
+    padding: 0 40px;
+    background-color: white;
 }
 .navbar .menu{
     position: absolute;
-    left: -10rem;
     top: 0;
+    left: 0;
     background-color: orange;
-    height: 100vw;
-    width: 10rem;
+    height: 80vh;
+    width: 5rem;
     padding: 5rem 0;
     transition: .5s;
 }
@@ -21,7 +22,12 @@
     margin-top: 3rem;
     display: grid;
     place-items: start;
-    gap: 2rem;
+    gap: 3rem;
+    font-size: 20px;
+    overflow: hidden;
+}
+.navbar .menu ul li{
+    width: 8rem;
 }
 .navbar .logo{
     display: flex;
@@ -38,6 +44,11 @@
     position: sticky;
     z-index: 1000;
 }
+.navbar .menu .menu-icon{
+    margin-right: 20px;
+
+}
+
 
 .nav-search{
     display: flex;
@@ -50,14 +61,14 @@
 .nav-search .nav-search-icon{
     padding: 10.5px;
     border: 1px solid black;
-    background-color: rgb(48, 196, 255);
+    background-color: orange;
     cursor: pointer;
 }
 .small_input{
     display: none;
     justify-content: center;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 2.5rem;
 }
 .small_input input{
     padding: 7px;
@@ -70,7 +81,7 @@
 }
 .user{
     display: flex;
-    gap: 2.5rem;
+    gap: 2rem;
     align-items: center;
 }
 .user .cart, 
@@ -79,6 +90,28 @@
     gap: .5rem;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+.user-info{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: orange;
+    padding: 40px;
+    border-radius: 10px;
+    position: absolute;
+    top: 3rem;
+}
+.user-info button{
+    padding: 6px;
+    width: 4rem;
+    border-radius: 10px;
+    transition: .3s;
+}
+.user-info button:hover{
+    background: black;
+    color: white;
 }
 .user .account small,
 .user .cart small{
@@ -134,7 +167,7 @@
     }
     .navbar .menu{
         font-size: 13px;
-        width: 8rem;
+        width: 5rem;
     }
     .toggleMenu{
         font-size: 18px;
@@ -142,7 +175,7 @@
 }
 
 @media (width < 735px) {
-   .user .account, 
+   .user .account .account-txt, 
     .user .cart{
         display: none;
     }
