@@ -18,7 +18,8 @@
     background: whitesmoke;
     border: 1px solid black;
 }
-.login form input{
+.login .email input,
+.login .password input{
     padding: 10px;
     min-width: 20rem;
 }
@@ -27,3 +28,12 @@
     width: 25rem;
     background: orange;
 }
+.remember{
+    justify-self: start;
+    gap: 1rem;
+    margin-left: .5rem;
+}
+.remember input{
+    width: 1rem;
+}
+
