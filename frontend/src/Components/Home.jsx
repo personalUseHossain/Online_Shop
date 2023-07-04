@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 //css
 import "../CSS/Home.css";
+import { Context } from "../App";
 
 export default function Home() {
+  const { isAdmin } = useContext(Context);
+  useEffect(() => {
+    console.log(isAdmin);
+  }, []);
   return (
     <>
       <div className="hero-section">
