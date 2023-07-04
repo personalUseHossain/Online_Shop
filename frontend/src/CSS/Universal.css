@@ -8,6 +8,8 @@
 body{
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
+    position: relative;
+    transition: all .5s;
 }
 li{
     list-style: none;
@@ -21,4 +23,26 @@ i,
 img,
 button{
     cursor: pointer;
+}
+form small{
+    color: red;
+    justify-self: start;
+    margin-left: .5rem;
+    display: none;
+}
+.body{
+    overflow: hidden;
+}
+.body::after{
+    content: '';
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    right: 0;
+}
+
+path{
+    pointer-events:all;
 }
