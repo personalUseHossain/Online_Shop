@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-
-//react router dom
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; //react router dom
+import "../CSS/Navbar.css"; // importing css
+import { Context } from "../App"; //getting context from app.jsx
 
 // fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,28 +19,48 @@ import {
   faAddressBook,
   faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
-
-// importing css
-import "../CSS/Navbar.css";
+import Cookies from "universal-cookie";
 
 export default function Navbar() {
+  const cookies = new Cookies(); //cookies
+  const navigate = useNavigate();
+
+  useEffect(() => {}, []);
+
   // useState hooks
   const [toggleIcon, setToggleIcon] = useState(faBarsStaggered); //toggle menu icon
-  const [showUser, setShowUser] = useState(false);
+  const [showUserInfo, setShowUserInfo] = useState(false); //show user info on navbar user icon
 
   // useRef hooks
   const menu = useRef(null); //sidebar section
 
+  //context api
+  const { isLogin, userData } = useContext(Context);
+
   // functions
+
+  //toggling side bar when click anywhere
+  document.addEventListener("click", (e) => {
+    if (toggleIcon === faXmark) {
+      if (e.target.id !== "menu" && e.target.id !== "toggleIcon") {
+        setToggleIcon(faBarsStaggered); //changing toggle icon to bars
+        menu.current.style.width = "5rem";
+        document.body.classList.remove("body");
+        setShowUserInfo(false);
+      }
+    } else return;
+  });
 
   //handling sidebar toggle
   function handleMenuToggle() {
     if (toggleIcon === faBarsStaggered) {
       setToggleIcon(faXmark); //changing toggle icon to xmark
       menu.current.style.width = "13rem";
+      document.body.classList.add("body");
     } else {
       setToggleIcon(faBarsStaggered); //changing toggle icon to bars
       menu.current.style.width = "5rem";
+      document.body.classList.remove("body");
     }
   }
 
@@ -54,6 +74,8 @@ export default function Navbar() {
     document.querySelector(".navbar").style.display = "grid";
     document.querySelector(".small_input").style.display = "none";
   }
+  //show user info
+  function handleShowUserInfo() {}
 
   return (
     <>
@@ -71,7 +93,7 @@ export default function Navbar() {
         />
       </div>
       <div className="navbar">
-        <div className="menu" ref={menu}>
+        <div className="menu" id="menu" ref={menu}>
           <ul>
             <li>
               <Link to="/">
@@ -107,6 +129,7 @@ export default function Navbar() {
         </div>
         <div className="logo">
           <FontAwesomeIcon
+            id="toggleIcon"
             className="toggleMenu"
             onClick={handleMenuToggle}
             icon={toggleIcon}
@@ -124,26 +147,59 @@ export default function Navbar() {
           />
         </div>
         <div className="user">
-          <div className="account" onClick={() => setShowUser(!showUser)}>
-            <FontAwesomeIcon className="user-icon account" icon={faUser} />
-            <div className="account-txt">
-              <small>Sign In</small>
-              <h5>Account</h5>
-            </div>
-            {showUser && (
-              <>
-                <div className="user-info">
-                  <FontAwesomeIcon icon={faXmark} />
-                  <Link to={"/login"}>
-                    <button>Login</button>
-                  </Link>
-                  <Link to={"/signup"}>
-                    <button>Sing up</button>
-                  </Link>
+          {!isLogin ? (
+            <>
+              <Link to={"/login"}>
+                <div className="account">
+                  <FontAwesomeIcon
+                    className="user-icon account"
+                    icon={faUser}
+                  />
+                  <div className="account-txt">
+                    <small>Sign In</small>
+                    <h5>Account</h5>
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="login-account">
+                <FontAwesomeIcon
+                  onClick={() => setShowUserInfo(!showUserInfo)}
+                  className="user-icon account"
+                  icon={faUser}
+                />
+                <h6>{userData.name}</h6>
+                <div
+                  className="account-info"
+                  style={{ display: showUserInfo ? "flex" : "none" }}
+                >
+                  <FontAwesomeIcon
+                    onClick={() => setShowUserInfo(false)}
+                    className="xmark"
+                    icon={faXmark}
+                  />
+                  <FontAwesomeIcon
+                    className="user-icon account"
+                    icon={faUser}
+                  />
+                  <h3>{userData.name}</h3>
+                  <small>{userData.email}</small>
+                  <button>Update Profile</button>
+                  <button
+                    onClick={() => {
+                      cookies.remove("login_token");
+                      alert("Logged out");
+                      location.reload();
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
 
           <Link to={"/cart"}>
             <FontAwesomeIcon
