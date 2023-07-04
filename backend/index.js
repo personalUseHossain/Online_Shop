@@ -1,22 +1,29 @@
-//Dependecy
+//modules
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
-
-//getting secret variables with dotenv
-dotenv.config();
-
-
-// Middleware
-app.use(express.json()); //using json file on backend
-app.use(express.urlencoded({ extended: false }));
-app.use(require('./routes/route')) // using routes from routes file
-
-
-//requireing mongodb connetion file
-// require('./db/db');
+const cors = require('cors');
 
 
 
-// serving on localhost:5000
-app.listen(process.env.PORT, () => console.log(`server is running on http://localhost:${process.env.PORT}`))
+//middlewares
+app.use(express.json()); //using json on express
+app.use(express.urlencoded({ extended: false })); //don't know what
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"]
+})); //using cors for not getting cors policy error
+
+
+
+dotenv.config(); //using dotenv variables
+
+
+require('./db/db'); //requireing database connetion 
+
+app.use(require('./routes/route')); //using all routes
+
+
+//starting server
+app.listen(5000, () => console.log(`server is running on http://localhost:5000`));
