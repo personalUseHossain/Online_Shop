@@ -10,8 +10,12 @@
     align-self: end;
     gap: 10px;
 }
-.signup form label{
+.signup form label .input{
     display: flex;
+}
+.signup form label small{
+    color: red;
+    display: none;
 }
 .signup form label .signup-icon{
     padding: 15px;
