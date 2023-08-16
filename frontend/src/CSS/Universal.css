@@ -30,6 +30,9 @@ form small{
     margin-left: .5rem;
     display: none;
 }
+.main{
+    margin: 0 5rem;
+}
 .body{
     overflow: hidden;
 }
