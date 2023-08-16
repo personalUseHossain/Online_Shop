@@ -10,7 +10,7 @@ const cors = require('cors');
 app.use(express.json()); //using json on express
 app.use(express.urlencoded({ extended: false })); //don't know what
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "*",
     credentials: true,
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"]
 })); //using cors for not getting cors policy error
