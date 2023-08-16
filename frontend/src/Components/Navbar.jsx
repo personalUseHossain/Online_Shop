@@ -18,14 +18,14 @@ import {
   faBlog,
   faAddressBook,
   faAddressCard,
+  faChartPie,
+  faCartPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "universal-cookie";
 
 export default function Navbar() {
   const cookies = new Cookies(); //cookies
   const navigate = useNavigate();
-
-  useEffect(() => {}, []);
 
   // useState hooks
   const [toggleIcon, setToggleIcon] = useState(faBarsStaggered); //toggle menu icon
@@ -34,8 +34,10 @@ export default function Navbar() {
   // useRef hooks
   const menu = useRef(null); //sidebar section
 
-  //context api
-  const { isLogin, userData } = useContext(Context);
+  //getting login, admin and user information from cookies which has been set up when login
+  const { login_token, userData, admin } =
+    cookies.get("online_shop_cookies") || {};
+  const isLogin = login_token ? true : false;
 
   // functions
 
@@ -46,7 +48,6 @@ export default function Navbar() {
         setToggleIcon(faBarsStaggered); //changing toggle icon to bars
         menu.current.style.width = "5rem";
         document.body.classList.remove("body");
-        setShowUserInfo(false);
       }
     } else return;
   });
@@ -74,8 +75,6 @@ export default function Navbar() {
     document.querySelector(".navbar").style.display = "grid";
     document.querySelector(".small_input").style.display = "none";
   }
-  //show user info
-  function handleShowUserInfo() {}
 
   return (
     <>
@@ -95,6 +94,22 @@ export default function Navbar() {
       <div className="navbar">
         <div className="menu" id="menu" ref={menu}>
           <ul>
+            {userData && userData.admin && (
+              <>
+                <li>
+                  <Link to="/dashboard">
+                    <FontAwesomeIcon className="menu-icon" icon={faChartPie} />
+                    DashBoard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/insert/product">
+                    <FontAwesomeIcon className="menu-icon" icon={faCartPlus} />
+                    New
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <Link to="/">
                 <FontAwesomeIcon className="menu-icon" icon={faHouse} />
@@ -164,32 +179,61 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <div className="login-account">
-                <FontAwesomeIcon
-                  onClick={() => setShowUserInfo(!showUserInfo)}
+              <div
+                className="login-account"
+                onClick={() => {
+                  setShowUserInfo(!showUserInfo);
+                }}
+              >
+                {!userData.img && (
+                  <>
+                    <FontAwesomeIcon
+                      className="user-icon account"
+                      icon={faUser}
+                    />
+                  </>
+                )}
+                <img
                   className="user-icon account"
-                  icon={faUser}
+                  src={`http://localhost:5000/public/${userData.img}`}
+                  alt=""
                 />
                 <h6>{userData.name}</h6>
                 <div
                   className="account-info"
-                  style={{ display: showUserInfo ? "flex" : "none" }}
+                  style={{ display: showUserInfo ? "grid" : "none" }}
                 >
                   <FontAwesomeIcon
                     onClick={() => setShowUserInfo(false)}
                     className="xmark"
                     icon={faXmark}
                   />
-                  <FontAwesomeIcon
+
+                  {!userData.img && (
+                    <>
+                      <FontAwesomeIcon
+                        className="user-icon account"
+                        icon={faUser}
+                      />
+                    </>
+                  )}
+                  <img
                     className="user-icon account"
-                    icon={faUser}
+                    src={`http://localhost:5000/public/${userData.img}`}
+                    alt=""
                   />
+
                   <h3>{userData.name}</h3>
                   <small>{userData.email}</small>
-                  <button>Update Profile</button>
+                  {userData.admin && (
+                    <p style={{ marginLeft: "20px" }}>Welcome Back Admin</p>
+                  )}
+                  <Link to={"/update/userinfo"}>
+                    <button>Update</button>
+                  </Link>
                   <button
                     onClick={() => {
-                      cookies.remove("login_token");
+                      cookies.remove("online_shop_cookies");
                       alert("Logged out");
                       location.reload();
                     }}
