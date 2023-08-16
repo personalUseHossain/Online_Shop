@@ -15,8 +15,8 @@ export default function Login() {
   const navigate = useNavigate(); //to navigate user to diffenent pages
 
   //Context
-  const { setIsLogin, setUserData, setIsAdmin, isAdmin } = useContext(Context);
-
+  const { online_shop_cookies, set_online_shop_cookies } = useContext(Context);
+  console.log(online_shop_cookies);
   //email and password input useState
   const [allInput, setAllInput] = useState({
     email: "",
@@ -27,7 +27,6 @@ export default function Login() {
 
   //handle email and password input
   function handleInput(e) {
-    console.log(isAdmin);
     let name = e.target.name,
       value = e.target.value;
     setAllInput({ ...allInput, [name]: value });
@@ -36,45 +35,43 @@ export default function Login() {
   //login post request
   async function handleSubmit(e) {
     e.preventDefault();
-    if (allInput.email === "" || allInput.password === "")
-      alert("input fields can't be empty");
-    const req = await axios.post("http://localhost:5000/login", {
-      allInput,
-      sendJwt,
-    });
-    const data = await req.data;
-    if (data.error) {
-      alert(data.error);
-    } else if (data.token) {
-      if (data.findUser.admin) {
-        setIsAdmin(true);
-        cookies.set("isAdmin", true);
-        setIsLogin(true);
-        setUserData(data.findUser);
-        cookies.set("login_token", data.token);
-        alert("welcome admin");
-        navigate("/");
-      } else {
-        setIsLogin(true);
-        setUserData(data.findUser);
-        cookies.set("login_token", data.token);
-        alert("Sucessfully logged in");
-        navigate("/");
-      }
-    } else if (data) {
-      if (data.admin) {
-        setIsAdmin(true);
-        cookies.set("isAdmin", true);
-        setIsLogin(true);
-        setUserData(data);
-        alert("welcome admin");
-        navigate("/");
-      } else {
-        setIsLogin(true);
-        setUserData(data);
-        alert("Sucessfully logged in");
+    if (allInput.email === "" || allInput.password === "") {
+      alert("Input fields can't be empty");
+      return;
+    }
+
+    try {
+      const req = await axios.post("http://localhost:5000/login", {
+        allInput,
+        sendJwt,
+      });
+
+      const data = req.data;
+
+      if (data.error) {
+        alert(data.error);
+      } else if (data.token) {
+        const newCookies = {
+          ...online_shop_cookies,
+          userData: data.findUser,
+          login_token: data.token,
+        };
+        set_online_shop_cookies(newCookies);
+        const cookie_expires_date = new Date();
+        cookie_expires_date.setMonth(cookie_expires_date.getMonth() + 1);
+        cookies.set("online_shop_cookies", newCookies, { cookie_expires_date });
+
+        if (data.findUser.admin) {
+          alert("Welcome admin");
+        } else {
+          alert("Successfully logged in");
+        }
+
         navigate("/");
       }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An error occurred while logging in.");
     }
   }
 
